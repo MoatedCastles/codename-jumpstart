@@ -72,12 +72,22 @@
     "webpack-dev-server": "^1.15.0"
   },
   "dependencies": {
+    "axios": "^0.15.3",
+    "bip32-utils": "^0.9.1",
+    "bitcoinjs-lib": "^2.3.0",
+    "body-parser": "^1.16.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.1",
+    "http": "0.0.0",
+    "path": "^0.12.7",
     "preact": "^7.1.0",
     "preact-compat": "^3.0.0",
     "preact-router": "^2.0.0",
     "promise-polyfill": "^6.0.2",
     "proptypes": "^0.14.3",
-    "serve": "^3.1.0"
+    "request": "^2.79.0",
+    "serve": "^3.1.0",
+    "uuidv4": "^0.4.0"
   },
   "main": "webpack.config.babel.js",
   "directories": {
