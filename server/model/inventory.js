@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 
 var inventorySchema = new mongoose.Schema({
-  front: String, 
-  back: String, 
-  purchased: Boolean, 
+  front: String,
+  back: String,
+  expiration: Date,
+  purchased: Boolean,
   user_uuid: String
 });
 
