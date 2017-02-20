@@ -5,8 +5,8 @@ import Header from './header';
 import Home from './home';
 import Profile from './profile';
 import InfoBox from './InfoBox';
-import { getCookieByKey } from './lib/utils';
-
+import { getCookieByKey } from '../lib/utils';
+import axios from 'axios';
 
 export default class App extends Component {
 	/** Gets fired when the route changes.
@@ -21,21 +21,20 @@ export default class App extends Component {
 		super();
 		
 	var uuid = window.localStorage.getItem('uuid');
-	if(uuid === null) {
-
-	}
-
-
-	if(uuid === null && cookie.includes('uuid=')) {
-		
-		window.localStorage.setItem('uuid',uuid);
-	} else if(!cookie.includes('uuid=') && uuid !== null) {
-			
-	}
-
-		this.state = {
-				uuid
-			};
+	var cookie = document.cookie;
+	if(uuid === null){
+		if(cookie.includes('uuid=')){
+			uuid = getCookieByKey('uuid');
+			window.localStorage.setItem('uuid',uuid);
+		} else {
+			axios.get('/uuid').then(resp => {
+				this.state = uuid;
+			});
+			window.localStorage.setItem('uuid',uuid);
+		} 
+	} else {
+		document.cookie = 'uuid=' + uuid;
+		}
 	}
 
 	render() {
@@ -43,7 +42,7 @@ export default class App extends Component {
 			<div id="app">
 				<Header />
 				<Router onChange={this.handleRoute}>
-					<InfoBox path="/" uuid={this.state.uuid} />
+					<InfoBox path="/" uuid={getCookieByKey('uuid')} />
 				</Router>
 			</div>
 		);
