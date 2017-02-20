@@ -89,6 +89,7 @@
     "preact-router": "^2.0.0",
     "promise-polyfill": "^6.0.2",
     "proptypes": "^0.14.3",
+    "qrcodejs": "^1.0.0",
     "request": "^2.79.0",
     "serve": "^3.1.0",
     "uuidv4": "^0.4.0",
