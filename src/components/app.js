@@ -2,11 +2,12 @@ import { h, Component } from 'preact';
 import { Router } from 'preact-router';
 
 import Header from './header';
-import Home from './home';
+import BuyWidget from './BuyWidget';
 import Profile from './profile';
 import InfoBox from './InfoBox';
 import { getCookieByKey } from '../lib/utils';
 import axios from 'axios';
+
 
 export default class App extends Component {
 	/** Gets fired when the route changes.
@@ -19,7 +20,23 @@ export default class App extends Component {
 
 	constructor(){
 		super();
+		var showWarning = window.localStorage.getItem('hideWarning') === null ? true : false;
+		this.state = { 
+			showWarning
+		};
 		this.checkAndSetCookieAndLocalStorage();
+	}
+
+	renderInfoBox(){
+		
+		if(window.localStorage.getItem('hideWarning') === null) {
+			return (<InfoBox path="/" uuid={getCookieByKey('uuid')} hideWarning={this.hideWarning.bind(this)} />);
+		}
+	}
+
+	hideWarning(){
+		window.localStorage.setItem('hideWarning','1');
+		this.setState( { showWarning: false });
 	}
 
 	checkAndSetCookieAndLocalStorage(){
@@ -45,8 +62,15 @@ export default class App extends Component {
 			<div id="app">
 				<Header />
 				<Router onChange={this.handleRoute}>
-					<InfoBox path="/" uuid={getCookieByKey('uuid')} />
+				<div path="/">
+					{this.renderInfoBox()}
+					<BuyWidget path="/" />
+				</div>
+				<div path="/account">
+					<h3>Nothing here yet</h3>
+				</div>
 				</Router>
+				
 			</div>
 		);
 	}

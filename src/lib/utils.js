@@ -10,4 +10,4 @@ var getCookieByKey = function(key){
 	}
 };
 
-export { getCookieByKey};
+export { getCookieByKey };

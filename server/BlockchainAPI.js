@@ -89,7 +89,7 @@ var createBitcoinURI = function(address,amount){
 };
 
 var allowZeroConfTransaction = function(hash){
-	const endpoint = `api.blockcypher.com/v1/btc/main/txs/${hash}/confidence?token=BLOCK_CYPHER_TOKEN`;
+	const endpoint = `api.blockcypher.com/v1/btc/main/txs/${hash}/confidence?token=${BLOCK_CYPHER_TOKEN}`;
 	return new Promise( (resolve,reject) => {
 		request(endpoint, function(error,response,body) {
 			if(!error && response.statusCode === 200){
