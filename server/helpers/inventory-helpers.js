@@ -1,12 +1,4 @@
-var getTransactionCount = function(){
-  var count = 0; // change this part
-  return count;
-}
-
-var getTransactionsByUUID = function(uuid){
-  // transaction must be in fulfilled state or less than 20 minutes old
-  // return Array of TX objects - { expire_date, img: { frontData: <base64>, rearData: <base64> } }
-};
+import Inventory from '../model/inventory';
 
 var addCard = function(cardDataObj){
   var base64ImgData = {
@@ -17,7 +9,13 @@ var addCard = function(cardDataObj){
   // return new promise db call 
 };
 
-var getNextCard = function(){
+var getNextCard = function(callback){
+  Inventory.find().sort({"expiration":1}).limit(1).exec((err,card) => {
+    console.log('card is: ', card);
+    callback(card);
+  });
   // Find card with the expiration date that is soonest upcoming
   // return promise that resolves with uuid of card
 };
+
+export { addCard, getNextCard };
