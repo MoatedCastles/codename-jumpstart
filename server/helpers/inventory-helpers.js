@@ -9,9 +9,9 @@ var addCard = function(cardDataObj){
   // return new promise db call 
 };
 
-var getNextCard = function(callback){
-  Inventory.find().sort({"expiration":1}).limit(1).exec((err,card) => {
-    console.log('card is: ', card);
+var getNextCard = function(quantity, callback){
+  Inventory.find().sort({"expiration":1}).limit(quantity).exec((err,cards) => {
+    console.log('cards are: ', cards);
     callback(card);
   });
   // Find card with the expiration date that is soonest upcoming
