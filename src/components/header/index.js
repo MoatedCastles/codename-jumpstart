@@ -7,7 +7,7 @@ export default class Header extends Component {
 	renderLoginAccountButton(loggedIn){
 		return loggedIn ? 
 			(<Link href="/account">Account</Link>)
-			: (<button>login</button>);
+			: (<a className="pointer" onClick={(e) => {e.preventDefault(); alert('a')} }>Login</a>);
 	}
 
 	render() {
@@ -16,7 +16,7 @@ export default class Header extends Component {
 				<h1>Instant Lounge</h1>
 				<nav>
 					<Link href="/">Buy</Link>
-					{this.renderLoginAccountButton(true)}
+					{this.renderLoginAccountButton(false)}
 				</nav>
 			</header>
 		);

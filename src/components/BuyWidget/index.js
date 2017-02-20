@@ -1,4 +1,6 @@
 import { h, Component } from 'preact';
+const MAX_ORDER = 4;
+
 
 export default class BuyWidget extends Component {
 	constructor(props){
@@ -7,15 +9,28 @@ export default class BuyWidget extends Component {
 	}
 
 	handleChange(e){
+		var val = e.target.value;
+		if(parseInt(e.target.value) >= MAX_ORDER){
+			e.target.value = MAX_ORDER;
+		} else if (parseInt(e.target.value) <= 1) {
+			e.target.value = 1;
+		}
 		this.setState({amount: e.target.value});
 	}
 
 	render({handleBuy}) {
 		return (
-			<div>
-				<h6>Purchase United Club One Time Entry Pass</h6>
+			<div className="buy_widget">
+				<h5>Purchase United Club One Time Entry Pass</h5>
 				<img className="uc_logo" src="http://i.imgur.com/LzYJQXm.jpg" />
-				<span>Qty:</span><input type="number" min="0" max="4" value={this.state.amount} onChange={(e) => this.handleChange(e)} />
+				<span>Qty:</span>
+				<input 
+					type="number" 
+					max="99" 
+					value={this.state.amount} 
+					onChange={(e) => this.handleChange(e)} 
+					onMouseUp={(e) => this.handleChange(e)}
+					/>
 				<a className="buybtn" onClick={() => alert('buy now' + this.state.amount)}>Buy</a>
 			</div>
 		);

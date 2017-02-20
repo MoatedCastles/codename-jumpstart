@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-const WARNING_MESSAGE = 'United Club passes are guaranteed valid, but do not gaurantee entry during times of high capacity. Check before purchasing, or just try to rebut gently the denial (can def work).';
+const WARNING_MESSAGE = 'United Club passes are guaranteed valid, but do not gaurantee entry during times of high capacity. They can make exceptions, so be nice.';
 
 export default class InfoBox extends Component {
 	
@@ -12,7 +12,7 @@ export default class InfoBox extends Component {
 		return (
 		<div class="infobox">
     		<h4>{WARNING_MESSAGE}</h4>
-    		<span className="clickable" onClick={hideWarning}><small>x - do not bug me</small></span>
+    		<span className="clickable blue" onClick={hideWarning}><small>x - i get it, geez</small></span>
     	</div>
 		);
 	}

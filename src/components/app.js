@@ -61,11 +61,11 @@ export default class App extends Component {
 		return (
 			<div id="app">
 				<Header />
+				{this.renderInfoBox()}
 				<Router onChange={this.handleRoute}>
-					{this.renderInfoBox()}
 					<BuyWidget path="/" />
 				</Router>
-
+				
 			</div>
 		);
 	}
