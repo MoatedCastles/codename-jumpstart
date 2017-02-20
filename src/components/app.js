@@ -61,9 +61,14 @@ export default class App extends Component {
 		return (
 			<div id="app">
 				<Header />
-				{this.renderInfoBox()}
 				<Router onChange={this.handleRoute}>
+				<div path="/">
+					{this.renderInfoBox()}
 					<BuyWidget path="/" />
+				</div>
+				<div path="/account">
+					<h3>Nothing here yet</h3>
+				</div>
 				</Router>
 				
 			</div>

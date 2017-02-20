@@ -3,11 +3,9 @@ import { Link } from 'preact-router';
 import style from './style';
 
 export default class Header extends Component {
-	
-	renderLoginAccountButton(loggedIn){
-		return loggedIn ? 
-			(<Link href="/account">Account</Link>)
-			: (<a className="pointer" onClick={(e) => {e.preventDefault(); alert('a')} }>Login</a>);
+
+	handleLoginLogout(){
+
 	}
 
 	render() {
@@ -15,8 +13,9 @@ export default class Header extends Component {
 			<header class={style.header}>
 				<h1>Instant Lounge</h1>
 				<nav>
-					<Link href="/">Buy</Link>
-					{this.renderLoginAccountButton(false)}
+					<Link href="/" Buy</Link>
+					<Link href="/account">Account</Link>
+					<a className="pointer" onClick={(e) => {e.preventDefault(); alert('a')} }>Login</a>
 				</nav>
 			</header>
 		);
