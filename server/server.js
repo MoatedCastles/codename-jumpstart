@@ -7,6 +7,13 @@ import request from 'request';
 import { getNewAddress , getBTCUSD, createBitcoinURI, totalUnspentAtAddress } from './BlockchainAPI';
 import uuidv4 from 'uuidv4';
 
+// importing DB models
+
+import dbAPI from './model/dbAPI';
+import Count from './model/count';
+import Inventory from './model/inventory';
+import Transactions from './model/transactions';
+
 const BlockchainAPI = {
 	getNewAddress,
 	getBTCUSD,
@@ -84,6 +91,18 @@ app.post('/addCard', (req,res) => {
 		res.end('Card data added to database.')
 	}).catch(consoleLogError);
 });
+
+app.post('/inventory', (req, res) => {
+  console.log("inventory req.body: ", req.body);
+  var NewCard = new Inventory({front: 'front', back: 'back', purchased: false, user_uuid: '1234'});
+  NewCard.save((err, post) => {
+    if(err){
+      console.log("Error in post to inventory")
+      res.status(500).send({error: err.message})
+    }
+    res.status(201).send(post);
+  })
+})
 
 app.use(express.static('build'));
 
