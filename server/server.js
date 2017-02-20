@@ -19,15 +19,15 @@ const USD_CARD_PRICE = '25';
 const consoleLogError = error => console.log(error);
 
 let app = express();
-
 app.use(cookieParser());
 app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+/*
 app.get('/', (req,res) => {
 	res.end('Current UUID: '+ JSON.stringify(req.cookies.uuid));
 }); 
-
+*/
 app.get('/uuid', (req,res) => {
 	
 	var uuid = req.cookies.uuid || uuidv4();
@@ -46,7 +46,7 @@ app.get('/payment_confirmed/:address', (req,res) => {
 		} else {
 			res.send('Outta dough, bro. <small>or too many freakin\' outputs');
 		}	
-	}).catch(consoleLogError)	
+	}).catch(consoleLogError);
 });
 
 app.get('/random', (req,res) => {

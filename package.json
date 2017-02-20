@@ -4,7 +4,7 @@
   "description": "Ready-to-go Preact starter project powered by webpack.",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --progress",
-    "start": "serve build -s -c 1",
+    "start": "npm run server",
     "prestart": "cross-env NODE_ENV=production webpack -p --progress --colors",
     "watch": "cross-env NODE_ENV=production webpack -p --progress --colors --watch",
     "prebuild": "mkdirp build && ncp src/assets build/assets",
