@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.get('/', (req,res) => {
 	res.end('Current UUID: '+ JSON.stringify(req.cookies.uuid));
-});
+}); 
 
 app.get('/uuid', (req,res) => {
 	

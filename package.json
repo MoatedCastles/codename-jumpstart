@@ -5,12 +5,12 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --progress",
     "start": "serve build -s -c 1",
-    "prestart": "npm run build",
-    "build": "cross-env NODE_ENV=production webpack -p --progress",
+    "prestart": "cross-env NODE_ENV=production webpack -p --progress --colors",
+    "watch": "cross-env NODE_ENV=production webpack -p --progress --colors --watch",
     "prebuild": "mkdirp build && ncp src/assets build/assets",
     "test": "npm run -s lint && npm run -s test:karma",
     "test:karma": "karma start test/karma.conf.js --single-run",
-    "server": "npm run build && nodemon server.bundle.js",
+    "server": "nodemon server.bundle.js",
     "lint": "eslint {src,test}"
   },
   "keywords": [
@@ -89,6 +89,7 @@
     "request": "^2.79.0",
     "serve": "^3.1.0",
     "uuidv4": "^0.4.0",
+    "webpack": "^1.14.0",
     "webpack-node-externals": "^1.5.4"
   },
   "main": "webpack.config.babel.js",
