@@ -12,7 +12,7 @@ var addCard = function(cardDataObj){
 var getNextCard = function(quantity, callback){
   Inventory.find().sort({"expiration":1}).limit(quantity).exec((err,cards) => {
     console.log('cards are: ', cards);
-    callback(card);
+    callback(cards);
   });
   // Find card with the expiration date that is soonest upcoming
   // return promise that resolves with uuid of card

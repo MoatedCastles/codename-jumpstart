@@ -137,7 +137,7 @@ app.get('/count', (req, res) => {
 })
 
 app.get('/getnext', (req, res) => {
-	getNextCard(2,(card) => {
+	getNextCard(1,(card) => {
 		console.log('next card is: ', card);
 		res.end();
 	})
