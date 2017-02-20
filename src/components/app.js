@@ -19,21 +19,24 @@ export default class App extends Component {
 
 	constructor(){
 		super();
-		
-	var uuid = window.localStorage.getItem('uuid');
-	var cookie = document.cookie;
-	if(uuid === null){
-		if(cookie.includes('uuid=')){
-			uuid = getCookieByKey('uuid');
-			window.localStorage.setItem('uuid',uuid);
+		this.checkAndSetCookieAndLocalStorage();
+	}
+
+	checkAndSetCookieAndLocalStorage(){
+		var uuid = window.localStorage.getItem('uuid');
+		var cookie = document.cookie;
+		if(uuid === null){
+			if(cookie.includes('uuid=')){
+				uuid = getCookieByKey('uuid');
+				if(uuid !== null)
+					window.localStorage.setItem('uuid',uuid);
+				} else {
+					axios.get('/uuid').then(resp => {
+						window.localStorage.setItem('uuid',resp.data);
+					});
+				} 
 		} else {
-			axios.get('/uuid').then(resp => {
-				this.state = uuid;
-			});
-			window.localStorage.setItem('uuid',uuid);
-		} 
-	} else {
-		document.cookie = 'uuid=' + uuid;
+			document.cookie = 'uuid=' + uuid;
 		}
 	}
 
