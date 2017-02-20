@@ -1,9 +1,10 @@
-import { h, Component } from 'preact';
+import { h, Component,render } from 'preact';
 import { Router } from 'preact-router';
 
 import Header from './header';
 import Home from './home';
 import Profile from './profile';
+import info_box from './info_box';
 
 export default class App extends Component {
 	/** Gets fired when the route changes.
@@ -20,8 +21,6 @@ export default class App extends Component {
 				<Header />
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
-					<Profile path="/profile/" user="me" />
-					<Profile path="/profile/:user" />
 				</Router>
 			</div>
 		);
