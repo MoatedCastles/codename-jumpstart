@@ -4,9 +4,17 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import http from 'http';
 import request from 'request';
-//import { getNewAddress , getBTCPrice, createBitcoinURI } from './server/BlockchainAPI';
+import { getNewAddress , getBTCUSD, createBitcoinURI, totalUnspentAtAddress } from './BlockchainAPI';
 import uuidv4 from 'uuidv4';
 
+const BlockchainAPI = {
+	getNewAddress,
+	getBTCUSD,
+	createBitcoinURI,
+	totalUnspentAtAddress
+};
+
+const USD_CARD_PRICE = '25';
 
 const consoleLogError = error => console.log(error);
 
@@ -21,9 +29,24 @@ app.get('/', (req,res) => {
 });
 
 app.get('/uuid', (req,res) => {
-	var uuid = uuidv4();
-	res.cookie('uuid', uuid);
+	
+	var uuid = req.cookies.uuid || uuidv4();
+	console.log(req.cookies)
+	if(!req.cookies.uuid)
+		res.cookie('uuid', uuid);
 	res.end(uuid);
+});
+
+app.get('/payment_confirmed/:address', (req,res) => {
+	BlockchainAPI.totalUnspentAtAddress(req.params.address).then(amt => {
+		if(amt > 0){
+			BlockchainAPI.getBTCUSD().then(spotPrice => {
+				res.send(`Total Unspent BTC: ${amt} ($${amt*spotPrice})`);
+			});
+		} else {
+			res.send('Outta dough, bro. <small>or too many freakin\' outputs');
+		}	
+	}).catch(consoleLogError)	
 });
 
 app.get('/random', (req,res) => {
@@ -34,13 +57,22 @@ app.get('/random', (req,res) => {
 	});
 });
 
-app.get('/buy/:amount', (req,res) => {
-	BlockchainAPI.getBTCPrice().then(price => {
+app.get('/price', (req,res) => {
+	BlockchainAPI.getBTCUSD().then(price=>{
+		res.end(String(price));
+	}).catch(consoleLogError);
+});
+
+app.get('/buy/:quantity', (req,res) => {
+	BlockchainAPI.getBTCUSD().then(price => {
 		BlockchainAPI.getNewAddress().then(address => {
-			var URI = BlockchainAPI.createBitcoinURI(address,amount);
+			let amtBTC = USD_CARD_PRICE * req.params.quantity / price;
+			let URI = BlockchainAPI.createBitcoinURI(address,amtBTC);
 			// Make new pending TX with soonest expiring stock
 			// setTimeout (remove uuid from db to free up stock if not purchased)
-			// Send  { btcURI, price, address, token } as response
+			// Send  { btcURI, price, address} as response
+			//res.end(`<a href="${URI}">Click me</a>`);
+			res.end(JSON.stringify({URI,price,amtBTC}));
 
 		}).catch(consoleLogError)
 	}).catch(consoleLogError);
@@ -53,7 +85,7 @@ app.post('/addCard', (req,res) => {
 	}).catch(consoleLogError);
 });
 
-app.use(express.static('client'));
+app.use(express.static('src'));
 
 app.listen(3000, () => {
 	console.log('Listening on port 3000...');
