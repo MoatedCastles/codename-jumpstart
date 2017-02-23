@@ -3,7 +3,7 @@ import { Router } from 'preact-router';
 
 import Header from './header';
 import BuyWidget from './BuyWidget';
-import Profile from './profile';
+// import Profile from './profile';
 import InfoBox from './InfoBox';
 import { getCookieByKey } from '../lib/utils';
 import axios from 'axios';

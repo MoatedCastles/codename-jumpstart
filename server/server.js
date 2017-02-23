@@ -16,6 +16,7 @@ import Transactions from './model/transactions';
 // importing helper functions
 import { getCount, incrementCount } from './helpers/count-helpers';
 import { addCard, getNextCard } from './helpers/inventory-helpers';
+import { createTransaction, getTransactionByUser } from './helpers/transaction-helpers';
 
 const BlockchainAPI = {
 	getNewAddress,
@@ -88,6 +89,9 @@ app.get('/buy/:quantity', (req,res) => {
 	}).catch(consoleLogError);
 });
 
+
+// The following are just examples of how to use functions and have prepopulated the database with some info
+
 app.post('/addCard', (req,res) => {
 	// { image: { frontData, rearData }, expiration_date}
 	dbAPI.addCard(req.body.card).then(success=>{
@@ -114,17 +118,17 @@ app.post('/inventory', (req, res) => {
   })
 })
 
-// // posts the original counter in the db.. only needed once
-// app.post('/count', (req, res) => {
-// 	var NewCount = new Count({count: 0});
-// 	NewCount.save((err, post) => {
-//     if(err){
-//       console.log("Error in post to inventory")
-//       res.status(500).send({error: err.message})
-//     }
-//     res.status(201).send(post);
-//   })
-// })
+// posts the original counter in the db.. only needed once
+app.post('/count', (req, res) => {
+	var NewCount = new Count({count: 0});
+	NewCount.save((err, post) => {
+    if(err){
+      console.log("Error in post to inventory")
+      res.status(500).send({error: err.message})
+    }
+    res.status(201).send(post);
+  })
+})
 
 app.get('/count', (req, res) => {
 	incrementCount((count) => {
@@ -134,6 +138,13 @@ app.get('/count', (req, res) => {
 	// getCount((count) => {
 	// 	console.log('count is: ', count[0].count);
 	// })
+})
+
+app.get('/begintx', (req, res) => {
+	createTransaction('btc address', 'user_uuid', 3, (response) => {
+		console.log('response is: ', response);
+		res.end();
+	})
 })
 
 app.get('/getnext', (req, res) => {
