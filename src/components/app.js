@@ -21,10 +21,10 @@ export default class App extends Component {
 	constructor(){
 		super();
 		var noLocalStorageFunc = () => console.log('No localStorage support in browser');
-		var func = noLocalStorageFunc;
+		var shamFunc = noLocalStorageFunc;
 		window.localStorage = window.localStorage || {
-																										getItem: func,
-																										setItem: func
+																										getItem: shamFunc,
+																										setItem: shamFunc
 																									};
 		var showWarning = window.localStorage.getItem('hideWarning') === null ? true : false;
 		this.state = {
