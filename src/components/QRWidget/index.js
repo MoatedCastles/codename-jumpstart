@@ -7,6 +7,7 @@ export default class QRWidget extends Component {
 
 	constructor(props){
 		super(props);
+
 	}
 
 	componentDidMount() {
@@ -23,6 +24,8 @@ export default class QRWidget extends Component {
 
 	// Note: `user` comes from the URL, courtesy of our router
 	render() {
+		const paymentReceivedImageSrc = 'http://i.imgur.com/oiC3rmu.png';
+
 		return (
 			<div>
 				<div id="qrcode">Loading...</div>
