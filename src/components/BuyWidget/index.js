@@ -1,4 +1,5 @@
 import { h, Component } from 'preact';
+import Purchase from '../../requests/purchase.js';
 const MAX_ORDER = 4;
 
 
@@ -18,6 +19,12 @@ export default class BuyWidget extends Component {
 		this.setState({amount: e.target.value});
 	}
 
+	buyPass(quantity, userId){
+		Purchase(quantity, userId, function(response){
+			console.log(response);
+		})
+	}
+
 	render({handleBuy}) {
 		return (
 			<div className="buy_widget">
@@ -31,7 +38,7 @@ export default class BuyWidget extends Component {
 					onChange={(e) => this.handleChange(e)} 
 					onMouseUp={(e) => this.handleChange(e)}
 					/>
-				<a className="buybtn" onClick={() => alert('buy now' + this.state.amount)}>Buy</a>
+				<a className="buybtn" onClick={() => this.buyPass(this.state.amount, 'theUserId')}>Buy</a>
 			</div>
 		);
 	}

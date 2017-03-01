@@ -74,17 +74,23 @@ app.get('/price', (req,res) => {
 	}).catch(consoleLogError);
 });
 
-app.get('/buy/:quantity', (req,res) => {
+app.get('/buy/:quantity/:userId', (req,res) => {
+	const quantity = req.params.quantity;
+	const userId = req.params.userId;
+	console.log('trying to purchase');
 	BlockchainAPI.getBTCUSD().then(price => {
 		BlockchainAPI.getNewAddress().then(address => {
 			let amtBTC = USD_CARD_PRICE * req.params.quantity / price;
 			let URI = BlockchainAPI.createBitcoinURI(address,amtBTC);
+			createTransaction('btc address', 'user_uuid', 3, (response) => {
+				console.log('response is: ', response);
+				res.end(JSON.stringify({URI,price,amtBTC}));
+				// res.end('your QR code is being generated' + URI);
+			})
 			// Make new pending TX with soonest expiring stock
 			// setTimeout (remove uuid from db to free up stock if not purchased)
 			// Send  { btcURI, price, address} as response
-			//res.end(`<a href="${URI}">Click me</a>`);
-			res.end(JSON.stringify({URI,price,amtBTC}));
-
+			// res.end('quantity is ' + quantity + ' from userID: ' + userId);
 		}).catch(consoleLogError)
 	}).catch(consoleLogError);
 });
@@ -138,20 +144,6 @@ app.get('/count', (req, res) => {
 	// getCount((count) => {
 	// 	console.log('count is: ', count[0].count);
 	// })
-})
-
-app.get('/begintx', (req, res) => {
-	createTransaction('btc address', 'user_uuid', 3, (response) => {
-		console.log('response is: ', response);
-		res.end();
-	})
-})
-
-app.get('/getnext', (req, res) => {
-	getNextCard(1,(card) => {
-		console.log('next card is: ', card);
-		res.end();
-	})
 })
 
 app.use(express.static('build'));

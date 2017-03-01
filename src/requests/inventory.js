@@ -1,6 +1,6 @@
 var axios = require('axios');
 
-const url = 'http://localhost:3003/inventory';
+const url = '/inventory';
 
 module.exports = function (callback) {
   axios.post(url)
