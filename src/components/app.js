@@ -20,15 +20,22 @@ export default class App extends Component {
 
 	constructor(){
 		super();
+
+		var noLocalStorageFunc = () => console.log('No localStorage support in browser');
+		var shamFunc = noLocalStorageFunc;
+
+		if(!window.localStorage){
+			window.localStorage =  { getItem: shamFunc, setItem: shamFunc };
+		}
 		var showWarning = window.localStorage.getItem('hideWarning') === null ? true : false;
-		this.state = { 
+		this.state = {
 			showWarning
 		};
 		this.checkAndSetCookieAndLocalStorage();
 	}
 
 	renderInfoBox(){
-		
+
 		if(window.localStorage.getItem('hideWarning') === null) {
 			return (<InfoBox path="/" uuid={getCookieByKey('uuid')} hideWarning={this.hideWarning.bind(this)} />);
 		}
@@ -51,7 +58,7 @@ export default class App extends Component {
 					axios.get('/uuid').then(resp => {
 						window.localStorage.setItem('uuid',resp.data);
 					});
-				} 
+				}
 		} else {
 			document.cookie = 'uuid=' + uuid;
 		}
@@ -70,7 +77,7 @@ export default class App extends Component {
 					<h3>Nothing here yet</h3>
 				</div>
 				</Router>
-				
+
 			</div>
 		);
 	}
