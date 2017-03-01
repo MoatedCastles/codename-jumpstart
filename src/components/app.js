@@ -20,7 +20,6 @@ export default class App extends Component {
 
 	constructor(){
 		super();
-
 		var noLocalStorageFunc = () => console.log('No localStorage support in browser');
 		var shamFunc = noLocalStorageFunc;
 
