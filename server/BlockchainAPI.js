@@ -85,7 +85,7 @@ var getNewAddress = function(){
 };
 
 var createBitcoinURI = function(address,amount){
-	return `bitcoin:${address}?amount=${parseInt(amount)}&label=lounge&message=United_Club_pass_purchase`;
+	return `bitcoin:${address}?amount=${parseFloat(amount)}&label=lounge&message=United_Club_pass_purchase`;
 };
 
 var allowZeroConfTransaction = function(hash){
