@@ -87,6 +87,8 @@ app.get('/buy/:quantity/:userId', (req,res) => {
 					let amtBTC = USD_CARD_PRICE * req.params.quantity / price;
 					let URI = BlockchainAPI.createBitcoinURI(address,amtBTC);
 					TransactionHelpers.createTransaction(address, userId, quantity, (response) => {
+						startCountdown(response._id, response.card_uuid);
+						console.log('transaction response is: ', response);
 						res.end(JSON.stringify({URI,price,amtBTC}));
 					})
 					// Make new pending TX with soonest expiring stock
@@ -99,6 +101,13 @@ app.get('/buy/:quantity/:userId', (req,res) => {
 	})
 });
 
+function startCountdown(transId, cardsArray){
+	setTimeout(() => {TransactionHelpers.deleteTransaction(transId, () => {
+		InventoryHelpers.resetPending(cardsArray, () => {
+			console.log('inventory reset');
+		})
+	})}, 30000)
+}
 
 // The following are just examples of how to use functions and have prepopulated the database with some info
 
@@ -137,6 +146,13 @@ app.post('/count', (req, res) => {
 app.get('/count', (req, res) => {
 	incrementCount((count) => {
 		console.log('incremented: ', count);
+		res.end();
+	})
+})
+
+app.get('/reset', (req, res) => {
+	InventoryHelpers.resetInventory((input) => {
+		console.log(input);
 		res.end();
 	})
 })
