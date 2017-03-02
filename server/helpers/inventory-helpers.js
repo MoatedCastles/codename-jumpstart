@@ -9,27 +9,25 @@ var addCard = function(cardDataObj){
   // return new promise db call 
 };
 
-var getNextCard = function(quantity, callback){
+module.exports.getNextCard = function(quantity, callback){
   Inventory.find({pending: false}).sort({"expiration":1}).limit(quantity).exec((err,cards) => {
-    console.log('cards are: ', cards);
+    // console.log('cards are: ', cards);
     callback(cards);
   });
   // Find card with the expiration date that is soonest upcoming
   // return promise that resolves with uuid of card
 };
 
-var setAsPending = function(cards, userId, callback){
+module.exports.setAsPending = function(cards, userId, callback){
   Inventory.update({_id: {"$in": cards}}, {pending: true}, {multi: true}, (response) => {
     callback(response);
-    console.log('inventory updated: ', response);
+    // console.log('inventory updated: ', response);
   })
 }
 
-var getInventoryCount = function(callback){
+module.exports.getInventoryCount = function(callback){
   Inventory.find({pending: false}).exec((err, response) => {
-    console.log('inv count response: ', response);
+    // console.log('inv count response: ', response);
     callback(response);
   })
 }
-
-export { addCard, getNextCard, setAsPending, getInventoryCount };

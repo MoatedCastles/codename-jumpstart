@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import http from 'http';
 import request from 'request';
-import { getNewAddress , getBTCUSD, createBitcoinURI, totalUnspentAtAddress } from './BlockchainAPI';
+import BlockchainAPI from './BlockchainAPI';
 import uuidv4 from 'uuidv4';
 
 // importing DB models
@@ -15,15 +15,8 @@ import Transactions from './model/transactions';
 
 // importing helper functions
 import { getCount, incrementCount } from './helpers/count-helpers';
-import { addCard, getNextCard, getInventoryCount } from './helpers/inventory-helpers';
-import { createTransaction, getTransactionByUser } from './helpers/transaction-helpers';
-
-const BlockchainAPI = {
-	getNewAddress,
-	getBTCUSD,
-	createBitcoinURI,
-	totalUnspentAtAddress
-};
+import InventoryHelpers from './helpers/inventory-helpers';
+import TransactionHelpers from './helpers/transaction-helpers';
 
 const USD_CARD_PRICE = '25';
 
@@ -42,7 +35,6 @@ app.get('/', (req,res) => {
 app.get('/uuid', (req,res) => {
 	
 	var uuid = req.cookies.uuid || uuidv4();
-	console.log(req.cookies)
 	if(!req.cookies.uuid)
 		res.cookie('uuid', uuid);
 	res.end(uuid);
@@ -75,20 +67,16 @@ app.get('/price', (req,res) => {
 });
 
 app.get('/buy/:quantity/:userId', (req,res) => {
-	getInventoryCount((count) => {
-		console.log('count: ', count)
+	InventoryHelpers.getInventoryCount((count) => {
 		const quantity = Number(req.params.quantity);
 		const userId = req.params.userId;
 		if(count && count.length >= quantity) {
-			console.log('trying to purchase');
 			BlockchainAPI.getBTCUSD().then(price => {
 				BlockchainAPI.getNewAddress().then(address => {
 					let amtBTC = USD_CARD_PRICE * req.params.quantity / price;
 					let URI = BlockchainAPI.createBitcoinURI(address,amtBTC);
-					createTransaction(address, userId, quantity, (response) => {
-						console.log('response is: ', response);
+					TransactionHelpers.createTransaction(address, userId, quantity, (response) => {
 						res.end(JSON.stringify({URI,price,amtBTC}));
-						// res.end('your QR code is being generated' + URI);					
 					})
 					// Make new pending TX with soonest expiring stock
 					// setTimeout (remove uuid from db to free up stock if not purchased)
@@ -102,13 +90,6 @@ app.get('/buy/:quantity/:userId', (req,res) => {
 
 
 // The following are just examples of how to use functions and have prepopulated the database with some info
-
-app.post('/addCard', (req,res) => {
-	// { image: { frontData, rearData }, expiration_date}
-	dbAPI.addCard(req.body.card).then(success=>{
-		res.end('Card data added to database.')
-	}).catch(consoleLogError);
-});
 
 app.post('/inventory', (req, res) => {
   console.log("inventory req.body: ", req.body);
@@ -147,9 +128,6 @@ app.get('/count', (req, res) => {
 		console.log('incremented: ', count);
 		res.end();
 	})
-	// getCount((count) => {
-	// 	console.log('count is: ', count[0].count);
-	// })
 })
 
 app.use(express.static('build'));
