@@ -1,9 +1,12 @@
 import Transactions from '../model/transactions';
-import { getNextCard } from './inventory-helpers';
+import { getNextCard, setAsPending } from './inventory-helpers';
 
 var createTransaction = function(btcAddress, uuid, quantity, callback){
   return new Promise(function(resolve,reject) {
     getNextCard(quantity, (cardsArray) => {
+      if(cardsArray.length === 0){
+        callback(false);
+      }
       var cards = cardsArray.map((card) => {
         return card._id;
       })
@@ -21,8 +24,10 @@ var createTransaction = function(btcAddress, uuid, quantity, callback){
         if(err){
           console.log("Error in creating transaction")
         }
-        callback(post);
-        console.log('tx created');
+        setAsPending(cards, uuid, (err) => {
+          callback(post);
+          console.log('tx created');
+        })
       })
     })
   })

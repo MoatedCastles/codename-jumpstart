@@ -5,6 +5,7 @@ var inventorySchema = new mongoose.Schema({
   back: String,
   expiration: Date,
   purchased: Boolean,
+  pending: Boolean,
   user_uuid: String
 });
 
