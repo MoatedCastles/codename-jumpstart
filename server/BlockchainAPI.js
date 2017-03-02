@@ -85,7 +85,7 @@ module.exports.getNewAddress = function(){
 };
 
 module.exports.createBitcoinURI = function(address,amount){
-	return `bitcoin:${address}?amount=${parseFloat(amount)}&label=lounge&message=United_Club_pass_purchase`;
+	return `bitcoin:${address}?amount=${parseFloat(amount).toFixed(5)}&label=United%20Club%20Pass`;
 };
 
 module.exports.allowZeroConfTransaction = function(hash){

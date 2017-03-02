@@ -21,8 +21,10 @@ export default class BuyWidget extends Component {
 
 	buyPass(quantity){
 		var userId = localStorage.getItem('uuid');
+		var props = this.props;
 		Purchase(quantity, userId, function(response){
 			console.log(response);
+			props.setURI(response.data.URI);
 		})
 	}
 
@@ -32,11 +34,11 @@ export default class BuyWidget extends Component {
 				<h5>Purchase United Club One Time Entry Pass</h5>
 				<img className="uc_logo" src="http://i.imgur.com/LzYJQXm.jpg" />
 				<span>Qty:</span>
-				<input 
-					type="number" 
-					max="99" 
-					value={this.state.amount} 
-					onChange={(e) => this.handleChange(e)} 
+				<input
+					type="number"
+					max="99"
+					value={this.state.amount}
+					onChange={(e) => this.handleChange(e)}
 					onMouseUp={(e) => this.handleChange(e)}
 					/>
 				<a className="buybtn" onClick={() => this.buyPass(this.state.amount)}>Buy</a>
