@@ -30,17 +30,24 @@ app.use(cookieParser());
 app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+const sendImageGenerator = (ws) => {
+	return function(imageData) {
+		ws.send(imageData);
+	}
+};
+
 /*
 app.get('/', (req,res) => {
 	res.end('Current UUID: '+ JSON.stringify(req.cookies.uuid));
 });
 */
 
+
+
 app.ws('/', (ws, req) => {
-	ws.on('subscribe', (uuid) => {
-		console.log('WebSockets cookies:',req.cookies);
-		console.log('Data passed to Subscribe:',uuid);
-	});
+	// once WS connection begins, timer should begin to release their held inv
+	// interval begins to check for incoming transaction
+	
 });
 
 app.get('/uuid', (req,res) => {
@@ -94,7 +101,7 @@ app.get('/buy/:quantity/:userId', (req,res) => {
 					// Make new pending TX with soonest expiring stock
 					// setTimeout (remove uuid from db to free up stock if not purchased)
 				}).catch(consoleLogError)
-			}).catch(consoleLogError);		
+			}).catch(consoleLogError);
 		} else {
 			res.end('Not enough Inventory');
 		}
