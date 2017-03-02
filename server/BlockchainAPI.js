@@ -25,7 +25,7 @@ var checkUnused = function(address){
 	});
 };
 
-var totalUnspentAtAddress = function(address){
+module.exports.totalUnspentAtAddress = function(address){
 	//arr.map(x => x.value / 100000000).reduce( (x,y) => x+y)
 	return new Promise ( (resolve,reject) => {
 		request(`https://blockchain.info/unspent?active=${address}`, function(error,response,body) {
@@ -59,7 +59,7 @@ var convertDollarsToBTC = function(dollars){
 	});
 };
 
-var getBTCUSD = function(){
+module.exports.getBTCUSD = function(){
 	return new Promise((resolve,reject) => {
 		request(`https://blockchain.info/ticker`, function (error, response, body) {
   			if (!error && response.statusCode == 200 ) {
@@ -75,7 +75,7 @@ var getBTCUSD = function(){
 };
 
 // [Generates address, checks for no unspent outputs, return promise!]
-var getNewAddress = function(){
+module.exports.getNewAddress = function(){
 	// need to get real transaction count from db
 	var index = 1;//dbAPI.getTransactionCount();
 	var hdNode = bitcoin.HDNode.fromSeedHex(PUBLIC_SEED);
@@ -84,11 +84,11 @@ var getNewAddress = function(){
 	return checkUnused(address); // this returns a promise
 };
 
-var createBitcoinURI = function(address,amount){
+module.exports.createBitcoinURI = function(address,amount){
 	return `bitcoin:${address}?amount=${parseFloat(amount)}&label=lounge&message=United_Club_pass_purchase`;
 };
 
-var allowZeroConfTransaction = function(hash){
+module.exports.allowZeroConfTransaction = function(hash){
 	const endpoint = `api.blockcypher.com/v1/btc/main/txs/${hash}/confidence?token=${BLOCK_CYPHER_TOKEN}`;
 	return new Promise( (resolve,reject) => {
 		request(endpoint, function(error,response,body) {
@@ -101,6 +101,3 @@ var allowZeroConfTransaction = function(hash){
 		});
 	});
 };
-
-
-export { getNewAddress , getBTCUSD, createBitcoinURI, totalUnspentAtAddress, allowZeroConfTransaction };

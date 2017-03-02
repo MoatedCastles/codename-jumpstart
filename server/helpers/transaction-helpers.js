@@ -1,9 +1,9 @@
 import Transactions from '../model/transactions';
-import { getNextCard, setAsPending } from './inventory-helpers';
+import Inventory from './inventory-helpers';
 
-var createTransaction = function(btcAddress, uuid, quantity, callback){
+module.exports.createTransaction = function(btcAddress, uuid, quantity, callback){
   return new Promise(function(resolve,reject) {
-    getNextCard(quantity, (cardsArray) => {
+    Inventory.getNextCard(quantity, (cardsArray) => {
       if(cardsArray.length === 0){
         callback(false);
       }
@@ -24,7 +24,7 @@ var createTransaction = function(btcAddress, uuid, quantity, callback){
         if(err){
           console.log("Error in creating transaction")
         }
-        setAsPending(cards, uuid, (err) => {
+        Inventory.setAsPending(cards, uuid, (err) => {
           callback(post);
           console.log('tx created');
         })
@@ -45,7 +45,7 @@ var checkUnused = function(address){
   });
 };
 
-var getTransactionsByUser = function(uuid, callback){
+module.exports.getTransactionsByUser = function(uuid, callback){
   Transactions.find({
     user_uuid: uuid,
     $or: [{fulfilled: true}, {pending: true}]
@@ -56,5 +56,3 @@ var getTransactionsByUser = function(uuid, callback){
   // transaction must be in fulfilled state or less than 20 minutes old
   // return Array of TX objects - { expire_date, img: { frontData: <base64>, rearData: <base64> } }
 };
-
-export { createTransaction, getTransactionsByUser };
