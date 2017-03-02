@@ -19,7 +19,8 @@ export default class BuyWidget extends Component {
 		this.setState({amount: e.target.value});
 	}
 
-	buyPass(quantity, userId){
+	buyPass(quantity){
+		var userId = localStorage.getItem('uuid');
 		Purchase(quantity, userId, function(response){
 			console.log(response);
 		})
@@ -38,7 +39,7 @@ export default class BuyWidget extends Component {
 					onChange={(e) => this.handleChange(e)} 
 					onMouseUp={(e) => this.handleChange(e)}
 					/>
-				<a className="buybtn" onClick={() => this.buyPass(this.state.amount, 'theUserId')}>Buy</a>
+				<a className="buybtn" onClick={() => this.buyPass(this.state.amount)}>Buy</a>
 			</div>
 		);
 	}
