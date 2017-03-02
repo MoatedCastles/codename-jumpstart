@@ -1,7 +1,6 @@
 import { h, Component } from 'preact';
 import Purchase from '../../requests/purchase.js';
 import QRCode from 'qrcode.react';
-import socket from 'socket.io-client';
 
 export default class QRCodeWrapper extends Component {
 
@@ -10,10 +9,7 @@ export default class QRCodeWrapper extends Component {
 		this.state = {
 				paymentComplete: false
 		};
-		var io = socket(`://${document.location.hostname}/`)
-		io.on('connection', () => {
-			console.log('Successfully connected via socket!');
-		});
+
 	}
 
 	render() {
