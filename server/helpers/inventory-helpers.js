@@ -11,23 +11,38 @@ var addCard = function(cardDataObj){
 
 module.exports.getNextCard = function(quantity, callback){
   Inventory.find({pending: false}).sort({"expiration":1}).limit(quantity).exec((err,cards) => {
-    // console.log('cards are: ', cards);
     callback(cards);
   });
-  // Find card with the expiration date that is soonest upcoming
-  // return promise that resolves with uuid of card
 };
 
 module.exports.setAsPending = function(cards, userId, callback){
   Inventory.update({_id: {"$in": cards}}, {pending: true}, {multi: true}, (response) => {
     callback(response);
-    // console.log('inventory updated: ', response);
+  })
+}
+
+module.exports.resetPending = function(cards, callback){
+  Inventory.update({_id: {"$in": cards}}, {pending: false}, {multi: true}, (response) => {
+    callback(response);
+  })
+}
+
+module.exports.setAsPurchased = function(cards, callback){
+
+  // not tested, hopefully working
+  Inventory.update({_id: {"$in": cards}}, {purchased: true}, {multi: true}, (response) => {
+    callback(response);
   })
 }
 
 module.exports.getInventoryCount = function(callback){
   Inventory.find({pending: false}).exec((err, response) => {
-    // console.log('inv count response: ', response);
     callback(response);
+  })
+}
+
+module.exports.resetInventory = function(callback){
+  Inventory.update({pending:true}, {pending:false}, {multi:true}, (response) => {
+    callback(response)
   })
 }

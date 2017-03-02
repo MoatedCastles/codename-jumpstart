@@ -56,3 +56,10 @@ module.exports.getTransactionsByUser = function(uuid, callback){
   // transaction must be in fulfilled state or less than 20 minutes old
   // return Array of TX objects - { expire_date, img: { frontData: <base64>, rearData: <base64> } }
 };
+
+module.exports.deleteTransaction = function(transId, callback){
+  Transactions.findOneAndRemove({_id: transId, pending: true}, (response) => {
+    console.log('findOne response is: ', response);
+    callback(response);
+  })
+}
