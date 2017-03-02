@@ -1,4 +1,5 @@
 import express from 'express';
+import express_ws from 'express-ws';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
@@ -23,6 +24,8 @@ const USD_CARD_PRICE = '25';
 const consoleLogError = error => console.log(error);
 
 let app = express();
+let expressWs = express_ws(app);
+
 app.use(cookieParser());
 app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -30,10 +33,18 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 /*
 app.get('/', (req,res) => {
 	res.end('Current UUID: '+ JSON.stringify(req.cookies.uuid));
-}); 
+});
 */
+
+app.ws('/', (ws, req) => {
+	ws.on('subscribe', (uuid) => {
+		console.log('WebSockets cookies:',req.cookies);
+		console.log('Data passed to Subscribe:',uuid);
+	});
+});
+
 app.get('/uuid', (req,res) => {
-	
+
 	var uuid = req.cookies.uuid || uuidv4();
 	if(!req.cookies.uuid)
 		res.cookie('uuid', uuid);
@@ -48,7 +59,7 @@ app.get('/payment_confirmed/:address', (req,res) => {
 			});
 		} else {
 			res.send('Outta dough, bro. <small>or too many freakin\' outputs');
-		}	
+		}
 	}).catch(consoleLogError);
 });
 

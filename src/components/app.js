@@ -7,7 +7,8 @@ import BuyWidget from './BuyWidget';
 import InfoBox from './InfoBox';
 import { getCookieByKey } from '../lib/utils';
 import axios from 'axios';
-
+import QRCode from 'qrcode.react';
+import QRCodeWrapper from './QRCodeWrapper';
 
 export default class App extends Component {
 	/** Gets fired when the route changes.
@@ -63,6 +64,19 @@ export default class App extends Component {
 		}
 	}
 
+	showBuyWidgetOrQRCode(){
+		const uri = `bitcoin:1Bt7tUXoYJ3hX9R6b1ZgMXah4i2Dzfo7eR?amount=0.02&label=United%20Club%20pass`;
+		return (
+			(this.state.uri !== undefined && this.state.uri !== null)
+				? <QRCodeWrapper uri={this.state.uri	} />
+				: <BuyWidget path="/" setURI={this.setURI.bind(this)} />
+		);
+	}
+
+	setURI(uri){
+		this.setState( {uri} );
+	}
+
 	render() {
 		return (
 			<div id="app">
@@ -70,7 +84,7 @@ export default class App extends Component {
 				<Router onChange={this.handleRoute}>
 				<div path="/">
 					{this.renderInfoBox()}
-					<BuyWidget path="/" />
+					{this.showBuyWidgetOrQRCode()}
 				</div>
 				<div path="/account">
 					<h3>Nothing here yet</h3>
