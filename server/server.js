@@ -96,7 +96,7 @@ app.get('/buy/:quantity/:userId', (req,res) => {
 				}).catch(consoleLogError)
 			}).catch(consoleLogError);		
 		} else {
-			res.end('Not enough Inventory');
+			res.end('Not enough Inventory. Only ' + count.length + ' tickets left in stock.');
 		}
 	})
 });
